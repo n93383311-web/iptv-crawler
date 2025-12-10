@@ -1,22 +1,17 @@
 import asyncio
 import aiohttp
-import aiohttp.client_exceptions
 import ssl
 
 INPUT_FILE = "found_links.txt"
 OUTPUT_FILE = "bg_playlist_temp.m3u"
 TIMEOUT = 10
-MAX_CONNECTIONS = 100  # can increase depending on GitHub runner
+MAX_CONNECTIONS = 100  # adjust as needed
 
 # read URLs
 with open(INPUT_FILE, "r") as f:
     urls = [line.strip() for line in f if line.strip()]
 
 valid_links = []
-
-# aiohttp connector
-sslcontext = ssl.create_default_context()
-conn = aiohttp.TCPConnector(limit=MAX_CONNECTIONS, ssl=sslcontext)
 
 async def test_url(session, url):
     try:
@@ -26,17 +21,19 @@ async def test_url(session, url):
                 valid_links.append(url)
             else:
                 print(f"FAILED ({response.status}): {url}")
-    except aiohttp.client_exceptions.ClientError:
-        print(f"FAILED (error): {url}")
-    except asyncio.TimeoutError:
-        print(f"FAILED (timeout): {url}")
+    except:
+        print(f"FAILED: {url}")
 
 async def main():
+    # Create connector INSIDE async context
+    sslcontext = ssl.create_default_context()
+    conn = aiohttp.TCPConnector(limit=MAX_CONNECTIONS, ssl=sslcontext)
+
     async with aiohttp.ClientSession(connector=conn) as session:
         tasks = [test_url(session, url) for url in urls]
         await asyncio.gather(*tasks)
 
-# run
+# run main
 asyncio.run(main())
 
 # write valid links to playlist
