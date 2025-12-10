@@ -1,5 +1,10 @@
 name: IPTV Crawler
 
+# Concurrency lock: only one workflow run at a time
+concurrency:
+  group: iptv-crawler
+  cancel-in-progress: false
+
 on:
   workflow_dispatch:
   schedule:
@@ -10,55 +15,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Checkout MUST be first
+    # 1️⃣ Checkout the repository
     - uses: actions/checkout@v3
 
-    # 2. Check for existing lock
-    - name: Check for workflow lock
-      run: |
-        if [ -f ".workflow_lock" ]; then
-          echo "Another workflow is running. Exiting..."
-          exit 0
-        fi
-
-    # 3. Create lock
-    - name: Create workflow lock
-      run: echo "locked" > .workflow_lock
-
-    # ---- your original steps ----
-
+    # 2️⃣ Set up Python
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
 
+    # 3️⃣ Install dependencies
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install requests beautifulsoup4
 
+    # 4️⃣ Run Crawler
     - name: Run Crawler
       run: python crawler.py
 
+    # 5️⃣ Test Links
     - name: Test Links
       run: python tester.py
 
+    # 6️⃣ Build Playlist
     - name: Build Playlist
       run: python build_playlist.py
 
+    # 7️⃣ Flatten Playlist
     - name: Flatten Playlist
       run: python flatten_m3u.py
 
-    # ---- end steps ----
-
-    # 4. Remove lock ALWAYS
-    - name: Remove workflow lock
-      if: always()
-      run: rm -f .workflow_lock
-
-    # 5. Commit results
+    # 8️⃣ Commit and Push changes
     - name: Commit and Push changes
-      if: always()
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
