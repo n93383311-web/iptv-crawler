@@ -5,6 +5,14 @@ import re
 import time
 from urllib.parse import urljoin, urlparse
 
+# === LOAD EXTRA KEYWORDS ===
+EXTRA_KEYWORDS = []
+try:
+    with open("keywords.txt", "r", encoding="utf8") as f:
+        EXTRA_KEYWORDS = [x.strip() for x in f if x.strip()]
+except FileNotFoundError:
+    EXTRA_KEYWORDS = []
+
 MAX_PAGES_PER_RUN = 50
 SEEDS_FILE = "seeds.txt"
 QUEUE_FILE = "queue.json"
