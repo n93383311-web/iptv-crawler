@@ -36,6 +36,10 @@ jobs:
     - name: Scan Repositories
       run: python repo_scanner.py
 
+    - name: Recursive Page Expander
+      run: python recursive_expander.py
+
+
     # 4️⃣ Run Crawler
     - name: Run Crawler
       run: python crawler.py
