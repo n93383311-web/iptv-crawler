@@ -33,6 +33,9 @@ jobs:
     - name: Search Engine Discovery
       run: python search_crawler.py
 
+    - name: Scan Repositories
+      run: python repo_scanner.py
+
     # 4️⃣ Run Crawler
     - name: Run Crawler
       run: python crawler.py
