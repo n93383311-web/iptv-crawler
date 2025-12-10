@@ -39,10 +39,12 @@ jobs:
     - name: Recursive Page Expander
       run: python recursive_expander.py
 
-
     # 4️⃣ Run Crawler
     - name: Run Crawler
       run: python crawler.py
+
+    - name: Expand Keywords
+      run: python expand_keywords.py
 
     # 5️⃣ Test Links
     - name: Test Links
