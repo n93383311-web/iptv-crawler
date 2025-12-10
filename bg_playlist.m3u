@@ -1,2 +1,8 @@
 #EXTM3U
 
+#EXTINF:-1,iptv-org.github.io
+https://iptv-org.github.io/iptv/languages/bul.m3u
+#EXTINF:-1,iptv-org.github.io
+https://iptv-org.github.io/iptv/countries/bg.m3u
+#EXTINF:-1,iptv-org.github.io
+https://iptv-org.github.io/iptv/cities/usbgk.m3u
