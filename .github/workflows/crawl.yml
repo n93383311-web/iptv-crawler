@@ -30,6 +30,9 @@ jobs:
     - name: Build Playlist
       run: python build_playlist.py
 
+    - name: Flatten Playlist
+      run: python flatten_m3u.py
+
     - name: Commit updated files
       run: |
         git config --local user.email "action@github.com"
