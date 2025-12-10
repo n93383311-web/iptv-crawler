@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # 1. Checkout MUST be first
+    - uses: actions/checkout@v3
+
+    # 2. Check for existing lock
     - name: Check for workflow lock
       run: |
         if [ -f ".workflow_lock" ]; then
@@ -17,10 +21,11 @@ jobs:
           exit 0
         fi
 
+    # 3. Create lock
     - name: Create workflow lock
       run: echo "locked" > .workflow_lock
 
-    - uses: actions/checkout@v3
+    # ---- your original steps ----
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -44,10 +49,14 @@ jobs:
     - name: Flatten Playlist
       run: python flatten_m3u.py
 
+    # ---- end steps ----
+
+    # 4. Remove lock ALWAYS
     - name: Remove workflow lock
       if: always()
       run: rm -f .workflow_lock
 
+    # 5. Commit results
     - name: Commit and Push changes
       if: always()
       run: |
@@ -57,4 +66,3 @@ jobs:
         git commit -m "Update crawler results" || echo "No changes"
         git pull --rebase
         git push
-
