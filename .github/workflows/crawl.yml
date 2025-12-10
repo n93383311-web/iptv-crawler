@@ -1,17 +1,28 @@
-name: IPTV Crawl
+name: IPTV Crawler
 
 on:
-  schedule:
-    - cron: '0 */6 * * *'  # every 6 hours
   workflow_dispatch:
+  schedule:
+    - cron: "0 */6 * * *"
 
 jobs:
   crawl:
     runs-on: ubuntu-latest
+
     steps:
+    - name: Check for workflow lock
+      run: |
+        if [ -f ".workflow_lock" ]; then
+          echo "Another workflow is running. Exiting..."
+          exit 0
+        fi
+
+    - name: Create workflow lock
+      run: echo "locked" > .workflow_lock
+
     - uses: actions/checkout@v3
 
-    - name: Setup Python
+    - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
@@ -33,11 +44,17 @@ jobs:
     - name: Flatten Playlist
       run: python flatten_m3u.py
 
-    - name: Commit updated files
+    - name: Remove workflow lock
+      if: always()
+      run: rm -f .workflow_lock
+
+    - name: Commit and Push changes
+      if: always()
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add bg_playlist.m3u visited.json queue.json found_links.txt
-        git commit -m "Update playlist and visited pages" || echo "No changes"
+        git add .
+        git commit -m "Update crawler results" || echo "No changes"
+        git pull --rebase
         git push
 
