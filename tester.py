@@ -1,10 +1,12 @@
-import requests
-from concurrent.futures import ThreadPoolExecutor, as_completed
+import asyncio
+import aiohttp
+import aiohttp.client_exceptions
+import ssl
 
 INPUT_FILE = "found_links.txt"
 OUTPUT_FILE = "bg_playlist_temp.m3u"
-MAX_THREADS = 20  # adjust depending on system/network speed
-TIMEOUT = 10      # seconds
+TIMEOUT = 10
+MAX_CONNECTIONS = 100  # can increase depending on GitHub runner
 
 # read URLs
 with open(INPUT_FILE, "r") as f:
@@ -12,26 +14,30 @@ with open(INPUT_FILE, "r") as f:
 
 valid_links = []
 
-def test_url(url):
-    try:
-        r = requests.get(url, timeout=TIMEOUT, stream=True)
-        if r.status_code == 200:
-            return url
-    except:
-        pass
-    return None
+# aiohttp connector
+sslcontext = ssl.create_default_context()
+conn = aiohttp.TCPConnector(limit=MAX_CONNECTIONS, ssl=sslcontext)
 
-# parallel testing
-with ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
-    future_to_url = {executor.submit(test_url, url): url for url in urls}
-    for future in as_completed(future_to_url):
-        url = future_to_url[future]
-        result = future.result()
-        if result:
-            valid_links.append(result)
-            print(f"VALID: {result}")
-        else:
-            print(f"FAILED: {url}")
+async def test_url(session, url):
+    try:
+        async with session.get(url, timeout=TIMEOUT) as response:
+            if response.status == 200:
+                print(f"VALID: {url}")
+                valid_links.append(url)
+            else:
+                print(f"FAILED ({response.status}): {url}")
+    except aiohttp.client_exceptions.ClientError:
+        print(f"FAILED (error): {url}")
+    except asyncio.TimeoutError:
+        print(f"FAILED (timeout): {url}")
+
+async def main():
+    async with aiohttp.ClientSession(connector=conn) as session:
+        tasks = [test_url(session, url) for url in urls]
+        await asyncio.gather(*tasks)
+
+# run
+asyncio.run(main())
 
 # write valid links to playlist
 with open(OUTPUT_FILE, "w") as f:
