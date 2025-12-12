@@ -15246,5 +15246,8 @@
   "https://iptv-org.github.io/iptv/countries/ls.m3u": 1765478573.8335452,
   "https://iptv-org.github.io/iptv/subdivisions/mx-gua.m3u": 1765478573.8867633,
   "https://iptv-org.github.io/iptv/subdivisions/cl-ml.m3u": 1765478573.9489138,
-  "http://185.235.187.11:8888/play/a00t/index.m3u8": 1765478574.0006838
+  "http://185.235.187.11:8888/play/a00t/index.m3u8": 1765478574.0006838,
+  "https://live-edge01.telecentro.net.ar/live/smil:c26.smil/playlist.m3u8": 1765505305.6393154,
+  "https://live-01-01-tn.vodgc.net/TN24/index.m3u8": 1765505306.6578584,
+  "https://host/hls-playlist.m3u8": 1765505308.4663434
 }
