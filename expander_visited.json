@@ -15529,5 +15529,11 @@
   "https://apptrailers.itunes.apple.com/itunes-assets/PurpleVideo221/v4/1d/31/0f/1d310fdf-1215-e2eb-316f-7dfaa3d5cf62/P1124939147_Anull_video_gr207_sdr_608x342.m3u8": 1765564903.012602,
   "https://apptrailers.itunes.apple.com/itunes-assets/PurpleVideo221/v4/1d/31/0f/1d310fdf-1215-e2eb-316f-7dfaa3d5cf62/P1124939147_Anull_video_gr685_sdr_1920x1080.m3u8": 1765564903.1530192,
   "https://cdnlive.codev8.net/rtvalive/smil:channel1.smil/chunklist_b2200000.m3u8": 1765564903.2866158,
-  "https://rtvelivestream-clnx.rtve.es/rtvesec/la1/la1_main_720.m3u8": 1765564903.5370553
+  "https://rtvelivestream-clnx.rtve.es/rtvesec/la1/la1_main_720.m3u8": 1765564903.5370553,
+  "https://pfilmhls.wns.live/hls/stream.m3u8": 1765591292.2006547,
+  "http://livestream.5centscdn.com/shaditv/23abe62a446fc05ce0a6c810f4045308.sdp/index.m3u8": 1765591292.4011154,
+  "https://livestream.5centscdn.com/ch1app/4e0ea63032b868402b61d3a35e7ca168.sdp/chunks.m3u8": 1765591293.185442,
+  "https://wo.cma.footballii.ir/hls2/solh.m3u8": 1765591293.4986541,
+  "https://poneplushls.persiana.live/hls/stream.m3u8": 1765591294.7622955,
+  "https://todayhls.wns.live/hls/stream.m3u8": 1765591295.277518
 }
